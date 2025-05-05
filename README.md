@@ -50,4 +50,3 @@ Claro, aquí tienes un ejemplo de un archivo `README.md` con los endpoints actua
 
 ---
 
-¿Quieres que te lo exporte en un archivo `.md` listo para descargar?
