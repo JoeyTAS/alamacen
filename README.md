@@ -1,4 +1,3 @@
-Claro, aquí tienes un ejemplo de un archivo `README.md` con los endpoints actualizados de tu API utilizando las rutas definidas:
 
 ---
 
