@@ -11,21 +11,27 @@ class CompraController {
     }
   }
 
-  async listarCompras(req, res) {
+    async eliminarCompra(req, res) {
     try {
-      const compras = await CompraService.obtenerCompras();
-      res.json(compras);
+      const compra_id = req.params.id;
+      const resultado = await CompraService.eliminarCompra(compra_id);
+      if (resultado) {
+        res.status(200).json({ message: 'Compra eliminada exitosamente' });
+      } else {
+        res.status(404).json({ error: 'Compra no encontrada' });
+      }
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: 'Error al eliminar la compra' });
     }
   }
 
   async obtenerHistorialPorUsuario(req, res) {
     try {
-      const historial = await CompraService.obtenerHistorialPorUsuario(req.params.id);
-      res.json(historial);
+      const usuario_id = req.params.id;
+      const historial = await CompraService.obtenerCompraPorId(usuario_id);
+      res.status(200).json(historial);
     } catch (error) {
-      res.status(404).json({ error: error.message });
+      res.status(500).json({ error: 'Error al obtener el historial de compras' });
     }
   }
 }

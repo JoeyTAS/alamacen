@@ -10,14 +10,7 @@ class CompraModel {
     return result.rows[0];
   }
 
-  // Obtener todas las compras de un usuario
-  async getComprasByUsuario(usuario_id) {
-    const result = await db.query(
-      `SELECT * FROM compras WHERE usuario_id = $1 ORDER BY fecha DESC`,
-      [usuario_id]
-    );
-    return result.rows;
-  }
+
 
   // Obtener una compra por ID
   async getCompraById(id) {

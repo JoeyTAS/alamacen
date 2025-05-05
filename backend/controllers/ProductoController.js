@@ -15,7 +15,7 @@ class ProductoController {
 
   async listar(req, res) {
     try {
-      const productos = await ProductoService.obtenerProductos();
+      const productos = await ProductoService.obtenerTodos();
       res.json({
         message: 'Productos obtenidos correctamente.',
         data: productos,
@@ -27,7 +27,7 @@ class ProductoController {
 
   async obtenerPorId(req, res) {
     try {
-      const producto = await ProductoService.obtenerProductoPorId(req.params.id);
+      const producto = await ProductoService.obtenerPorId(req.params.id);
       res.json({
         message: 'Producto encontrado.',
         data: producto,

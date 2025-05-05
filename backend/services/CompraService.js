@@ -5,10 +5,6 @@ class CompraService {
     return await CompraModel.createCompra(usuario_id);
   }
 
-  async obtenerComprasDeUsuario(usuario_id) {
-    return await CompraModel.getComprasByUsuario(usuario_id);
-  }
-
   async obtenerCompraPorId(id) {
     return await CompraModel.getCompraById(id);
   }

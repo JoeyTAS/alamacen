@@ -6,15 +6,15 @@ const ProductoController = require('../controllers/ProductoController');
 router.post('/productos', ProductoController.crear);
 
 // Ruta para listar todos los productos
-router.get('/productos', ProductoController.listar);
+router.get('/productos_listar', ProductoController.listar);
 
 // Ruta para obtener un producto por su ID
-router.get('/productos/:id', ProductoController.obtenerPorId);
+router.get('/:id', ProductoController.obtenerPorId);
 
 // Ruta para actualizar un producto por su ID
-router.put('/productos/:id', ProductoController.actualizar);
+router.put('/actualizar/:id', ProductoController.actualizar);
 
 // Ruta para eliminar un producto por su ID
-router.delete('/productos/:id', ProductoController.eliminar);
+router.delete('/eliminar/:id', ProductoController.eliminar);
 
 module.exports = router;
