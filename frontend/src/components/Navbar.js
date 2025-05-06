@@ -58,14 +58,10 @@ const Navbar = () => {
         ) : (
           <ul className="nav-menu">
             <li className="nav-item">
-              <Link to="/login" className="nav-link">
-                Iniciar Sesión
-              </Link>
+              
             </li>
             <li className="nav-item">
-              <Link to="/register" className="nav-link">
-                Registrarse
-              </Link>
+            
             </li>
           </ul>
         )}
