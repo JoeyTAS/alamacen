@@ -1,137 +1,144 @@
-import { useState, useEffect } from "react"
-import { getAllProductos, createProducto, updateProducto, deleteProducto } from "../services/productoService"
-import "./Productos.css"
+import { useState, useEffect } from "react";
+import {
+  getAllProductos,
+  createProducto,
+  updateProducto,
+  deleteProducto,
+} from "../services/productoService";
+import "./Productos.css";
 
 const Productos = () => {
-  const [productos, setProductos] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [showForm, setShowForm] = useState(false)
-  const [currentProducto, setCurrentProducto] = useState(null)
-  const [searchTerm, setSearchTerm] = useState("")
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [currentProducto, setCurrentProducto] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
     precio: "",
     categoria: "",
     stock: "",
-  })
+  });
 
   // Cargar productos al montar el componente
   useEffect(() => {
-    fetchProductos()
-  }, [])
+    fetchProductos();
+  }, []);
 
   // Función para cargar todos los productos
   const fetchProductos = async () => {
     try {
-      setLoading(true)
-      const data = await getAllProductos()
-      setProductos(data)
-      setError(null)
+      setLoading(true);
+      const data = await getAllProductos();
+      setProductos(data);
+      setError(null);
     } catch (err) {
-      console.error("Error al cargar productos:", err)
-      setError("Error al cargar los productos. Por favor, intente nuevamente.")
+      console.error("Error al cargar productos:", err);
+      setError("Error al cargar los productos. Por favor, intente nuevamente.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Manejar cambios en el formulario
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   // Abrir formulario para crear nuevo producto
   const handleNewProducto = () => {
-    setCurrentProducto(null)
+    setCurrentProducto(null);
     setFormData({
       nombre: "",
       descripcion: "",
       precio: "",
       categoria: "",
       stock: "",
-    })
-    setShowForm(true)
-  }
+    });
+    setShowForm(true);
+  };
 
   // Abrir formulario para editar producto existente
   const handleEditProducto = (producto) => {
-    setCurrentProducto(producto)
+    setCurrentProducto(producto);
     setFormData({
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: producto.precio,
       categoria: producto.categoria,
       stock: producto.stock,
-    })
-    setShowForm(true)
-  }
+    });
+    setShowForm(true);
+  };
 
   // Enviar formulario (crear o actualizar)
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      setLoading(true)
+      setLoading(true);
 
       // Convertir valores numéricos
       const productoData = {
         ...formData,
         precio: Number.parseFloat(formData.precio),
         stock: Number.parseInt(formData.stock),
-      }
+      };
 
       if (currentProducto) {
         // Actualizar producto existente
-        await updateProducto(currentProducto.id, productoData)
+        await updateProducto(currentProducto.id, productoData);
       } else {
         // Crear nuevo producto
-        await createProducto(productoData)
+        await createProducto(productoData);
       }
 
       // Recargar lista de productos
-      await fetchProductos()
-      setShowForm(false)
-      setError(null)
+      await fetchProductos();
+      setShowForm(false);
+      setError(null);
     } catch (err) {
-      console.error("Error al guardar producto:", err)
-      setError("Error al guardar el producto. Por favor, intente nuevamente.")
+      console.error("Error al guardar producto:", err);
+      setError("Error al guardar el producto. Por favor, intente nuevamente.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Eliminar producto
   const handleDeleteProducto = async (id) => {
     if (window.confirm("¿Está seguro de que desea eliminar este producto?")) {
       try {
-        setLoading(true)
-        await deleteProducto(id)
-        await fetchProductos()
-        setError(null)
+        setLoading(true);
+        await deleteProducto(id);
+        await fetchProductos();
+        setError(null);
       } catch (err) {
-        console.error("Error al eliminar producto:", err)
-        setError("Error al eliminar el producto. Por favor, intente nuevamente.")
+        console.error("Error al eliminar producto:", err);
+        setError(
+          "Error al eliminar el producto. Por favor, intente nuevamente."
+        );
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-  }
+  };
 
   // Filtrar productos por término de búsqueda
   const filteredProductos = productos.filter(
     (producto) =>
       producto.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      producto.categoria.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      producto.categoria.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading && productos.length === 0) {
-    return <div className="loading">Cargando...</div>
+    return <div className="loading">Cargando...</div>;
   }
 
   return (
@@ -241,7 +248,11 @@ const Productos = () => {
                 <button type="submit" className="btn btn-primary">
                   {currentProducto ? "Actualizar" : "Guardar"}
                 </button>
-                <button type="button" className="btn btn-secondary" onClick={() => setShowForm(false)}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowForm(false)}
+                >
                   Cancelar
                 </button>
               </div>
@@ -267,14 +278,28 @@ const Productos = () => {
                 <tr key={producto.id}>
                   <td>{producto.nombre}</td>
                   <td>{producto.categoria}</td>
-                  <td>S/ {producto.precio.toFixed(2)}</td>
-                  <td className={producto.stock < 10 ? "stock-warning" : ""}>{producto.stock}</td>
+                  <td>
+                    {/* Convertir a número antes de usar toFixed */}
+                    S/{" "}
+                    {isNaN(Number(producto.precio))
+                      ? "0.00"
+                      : Number(producto.precio).toFixed(2)}
+                  </td>
+                  <td className={producto.stock < 10 ? "stock-warning" : ""}>
+                    {producto.stock}
+                  </td>
                   <td>
                     <div className="action-buttons">
-                      <button className="btn-action btn-edit" onClick={() => handleEditProducto(producto)}>
+                      <button
+                        className="btn-action btn-edit"
+                        onClick={() => handleEditProducto(producto)}
+                      >
                         Editar
                       </button>
-                      <button className="btn-action btn-delete" onClick={() => handleDeleteProducto(producto.id)}>
+                      <button
+                        className="btn-action btn-delete"
+                        onClick={() => handleDeleteProducto(producto.id)}
+                      >
                         Eliminar
                       </button>
                     </div>
@@ -292,7 +317,7 @@ const Productos = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Productos
+export default Productos;
