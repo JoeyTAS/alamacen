@@ -2,6 +2,7 @@ import axios from "axios"
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001/api/producto/productos_listar"
 
+
 // Obtener todos los productos
 export const getAllProductos = async () => {
   try {

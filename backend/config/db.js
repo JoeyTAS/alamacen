@@ -7,7 +7,7 @@ class Database {
       host: 'localhost',
       database: 'inventario',
       password: 'admin',
-      port: 5433,
+      port: 5432,
     });
   }
 
