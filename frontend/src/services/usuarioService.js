@@ -11,7 +11,7 @@ export const registerUser = async (userData) => {
     throw new Error(error.response?.data?.error || "Error al registrar usuario")
   }
 }
-
+  
 // Iniciar sesión - VERSIÓN MODIFICADA
 export const loginUser = async (email, contraseña) => {
   try {
