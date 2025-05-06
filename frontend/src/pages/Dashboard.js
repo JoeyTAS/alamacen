@@ -35,7 +35,11 @@ const Dashboard = () => {
         }
       } catch (err) {
         console.error("Error al cargar datos del dashboard:", err)
-        setError("Error al cargar los datos. Por favor, intente nuevamente.")
+        if (err.message.includes("404")) {
+          setError("No se pudo conectar con el servidor. Verifique que el servidor esté en ejecución.")
+        } else {
+          setError("Error al cargar los datos. Por favor, intente nuevamente.")
+        }
       } finally {
         setLoading(false)
       }
