@@ -10,10 +10,12 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useContext(AuthContext)
   const navigate = useNavigate()
-
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
@@ -23,7 +25,7 @@ const Login = () => {
       setError("Por favor complete todos los campos")
       return
     }
-
+    
     // Validación del formato del email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
@@ -36,6 +38,7 @@ const Login = () => {
       console.log("Login: Intentando iniciar sesión con", email)
       await login(email.trim(), password)
       console.log("Login: Inicio de sesión exitoso, redirigiendo...")
+      
       navigate("/")
     } catch (err) {
       console.error("Login: Error de inicio de sesión:", err)
@@ -95,16 +98,33 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+      <label htmlFor="password">Contraseña</label>
+      <div style={{ position: 'relative' }}>
+        <input
+          type={showPassword ? 'text' : 'password'}
+          id="password"
+          className="form-control"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button
+          type="button"
+          onClick={toggleShowPassword}
+          style={{
+            position: 'absolute',
+            right: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          {showPassword ? '🙈' : '👁️'}
+        </button>
+      </div>
+    </div>
 
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
