@@ -49,3 +49,5 @@
 
 ---
 
+LIBRERIAS FRONTEND 
+--> npm install @react-oauth/google
