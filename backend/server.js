@@ -4,6 +4,7 @@ const UsuarioRouters = require('./routers/UsuarioRouters');
 const CompraRouters = require('./routers/CompraRouters'); 
 const HistorialRouters = require('./routers/HistorialRouters'); 
 const ProductoRouters = require('./routers/ProductoRouters'); 
+const reniecRoutes = require("./routers/ReniecRouters"); 
 
 class Server {
   constructor() {
@@ -23,6 +24,8 @@ class Server {
     this.app.use('/api/historial', HistorialRouters); // '/api/historial' como prefijo para las rutas de historial
     this.app.use('/api/producto', ProductoRouters); // '/api/producto' como prefijo para las rutas de producto
     this.app.use('/api/usuarios', UsuarioRouters); // '/api/usuarios' como prefijo para las rutas de usuario
+    this.app.use("/api/reniec", reniecRoutes);
+
   }
 
   start() {

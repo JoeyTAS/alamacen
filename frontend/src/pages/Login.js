@@ -10,12 +10,14 @@ const Login = () => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
   const { login } = useContext(AuthContext)
   const navigate = useNavigate()
+
   const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
@@ -25,7 +27,7 @@ const Login = () => {
       setError("Por favor complete todos los campos")
       return
     }
-    
+
     // Validación del formato del email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
@@ -44,34 +46,6 @@ const Login = () => {
       console.error("Login: Error de inicio de sesión:", err)
       setError(err.message || "Error al iniciar sesión")
     } finally {
-      setLoading(false)
-    }
-  }
-
-  // Función de inicio de sesión directo (bypass)
-  const handleDirectLogin = async () => {
-    try {
-      setLoading(true)
-      setError("")
-      console.log("Login: Intentando inicio de sesión directo con", email)
-
-      // Almacenar usuario directamente en localStorage sin verificación
-      const fakeUser = {
-        id: 1, // Este ID debe existir en tu base de datos
-        email: email,
-        nombres: "Usuario",
-        apellidos: "Temporal",
-        rol: "cliente",
-      }
-
-      localStorage.setItem("user", JSON.stringify(fakeUser))
-      console.log("Login: Usuario almacenado en localStorage:", fakeUser)
-
-      // Recargar la página para que AuthContext detecte el usuario en localStorage
-      window.location.href = "/"
-    } catch (err) {
-      console.error("Login: Error en inicio de sesión directo:", err)
-      setError("Error en inicio de sesión directo")
       setLoading(false)
     }
   }
@@ -98,46 +72,36 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-      <label htmlFor="password">Contraseña</label>
-      <div style={{ position: 'relative' }}>
-        <input
-          type={showPassword ? 'text' : 'password'}
-          id="password"
-          className="form-control"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button
-          type="button"
-          onClick={toggleShowPassword}
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          {showPassword ? '🙈' : '👁️'}
-        </button>
-      </div>
-    </div>
+            <label htmlFor="password">Contraseña</label>
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={toggleShowPassword}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
+          </div>
 
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
             {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
-          </button>
-
-          {/* Botón de inicio de sesión directo (solo para depuración) */}
-          <button
-            type="button"
-            className="btn btn-secondary btn-block mt-2"
-            onClick={handleDirectLogin}
-            disabled={loading || !email}
-          >
-            Acceso Directo (Depuración)
           </button>
         </form>
 

@@ -31,19 +31,19 @@ const HistorialCompras = () => {
               total: 0,
             }
           }
-
+        
           // Agregar producto a la compra
           acc[compra.compra_id].productos.push({
             id: compra.producto_id,
             nombre: compra.producto,
             cantidad: compra.cantidad,
             precio_unitario: compra.precio_unitario,
-            subtotal: compra.total,
+            subtotal: parseFloat(compra.total) || 0, // Asegurar que subtotal sea un número
           })
-
+        
           // Actualizar total de la compra
-          acc[compra.compra_id].total += compra.total
-
+          acc[compra.compra_id].total += parseFloat(compra.total) || 0 // Asegurar que total sea un número
+        
           return acc
         }, {})
 

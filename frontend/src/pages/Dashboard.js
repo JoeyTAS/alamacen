@@ -107,7 +107,7 @@ const Dashboard = () => {
                       <td>{producto.nombre}</td>
                       <td>{producto.categoria}</td>
                       <td className="stock-warning">{producto.stock}</td>
-                      <td>S/ {producto.precio.toFixed(2)}</td>
+                      <td>S/ {Number(Number(producto.precio).toFixed(2))}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -137,7 +137,9 @@ const Dashboard = () => {
                       <td>{new Date(compra.fecha).toLocaleDateString()}</td>
                       <td>{compra.producto}</td>
                       <td>{compra.cantidad}</td>
-                      <td>S/ {compra.total.toFixed(2)}</td>
+                      <td>
+                        S/ {typeof compra.total === "number" ? compra.total.toFixed(2) : parseFloat(compra.total || 0).toFixed(2)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

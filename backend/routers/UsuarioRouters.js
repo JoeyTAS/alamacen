@@ -15,13 +15,14 @@ router.get('/:id', UsuarioController.obtenerPorId);
 router.get('/email/:email', UsuarioController.obtenerPorEmail);
 
 // Ruta para listar todos los usuarios
-router.get('/',(req, res) => UsuarioController.listar(req, res));
-//router.get('/', UsuarioController.listar);
+router.get('/', (req, res) => UsuarioController.listar(req, res));
 
 // Ruta para eliminar un usuario por su ID
 router.delete('/:id', UsuarioController.eliminar);
 
-// Ruta para actualizar los detalles de un usuario
-router.put('/:id', UsuarioController.actualizar);
+router.put('/:id/email', UsuarioController.actualizarEmail);
+
+// Ruta para actualizar solo la contraseña
+router.put('/:id/password', UsuarioController.actualizarContraseña);
 
 module.exports = router;

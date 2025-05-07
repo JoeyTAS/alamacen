@@ -4,7 +4,7 @@ class UsuarioController {
   // Registrar un nuevo usuario
   async registrar(req, res) {
     try {
-      const { dni, nombres, apellidos, email, contraseña, rol } = req.body
+      const { dni, nombres, apellidos, email, contraseña, rol } = req.body;
       const nuevoUsuario = await UsuarioService.registrarUsuario({
         dni,
         nombres,
@@ -12,42 +12,26 @@ class UsuarioController {
         email,
         contraseña,
         rol,
-      })
-      res.status(201).json(nuevoUsuario)
+      });
+      res.status(201).json(nuevoUsuario);
     } catch (error) {
-      res.status(400).json({ error: error.message })
+      res.status(400).json({ error: error.message });
     }
   }
 
   // Autenticar usuario (login)
   async login(req, res) {
     try {
-      console.log("Recibida solicitud de login:", req.body)
-      const { email, contraseña } = req.body
-
-      // SOLUCIÓN TEMPORAL: Obtener el usuario sin verificar la contraseña
-      // Esto es solo para fines de depuración
-      try {
-        const usuario = await UsuarioService.autenticarUsuario(email, contraseña)
-        console.log("Usuario autenticado correctamente")
-        res.status(200).json({ usuario })
-      } catch (authError) {
-        console.error("Error de autenticación:", authError.message)
-
-        // SOLUCIÓN TEMPORAL: Si falla la autenticación, intentamos obtener el usuario por email
-        console.log("ADVERTENCIA: Intentando obtener usuario sin verificar contraseña")
-        const usuario = await UsuarioService.obtenerUsuarioPorEmail(email)
-
-        if (usuario) {
-          console.log("Usuario encontrado, permitiendo acceso sin verificar contraseña")
-          res.status(200).json({ usuario })
-        } else {
-          res.status(400).json({ error: "Usuario no encontrado" })
-        }
-      }
+      console.log("Recibida solicitud de login:", req.body);
+      const { email, contraseña } = req.body;
+  
+      // Autenticar usuario con email y contraseña
+      const usuario = await UsuarioService.autenticarUsuario(email, contraseña);
+      console.log("Usuario autenticado correctamente");
+      res.status(200).json({ usuario });
     } catch (error) {
-      console.error("Error en el controlador de login:", error)
-      res.status(400).json({ error: error.message })
+      console.error("Error de autenticación:", error.message);
+      res.status(400).json({ error: "Credenciales inválidas" });
     }
   }
 
@@ -90,6 +74,31 @@ class UsuarioController {
       res.status(400).json({ error: error.message })
     }
   }
+// Actualizar solo la contraseña
+async actualizarEmail(req, res) {
+  try {
+    const { id } = req.params;
+    const { email } = req.body;
+
+    const usuarioActualizado = await UsuarioService.actualizarEmail(id, email);
+    res.status(200).json(usuarioActualizado);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+// Actualizar solo la contraseña
+async actualizarContraseña(req, res) {
+  try {
+    const { id } = req.params;
+    const { contraseña } = req.body;
+
+    const usuarioActualizado = await UsuarioService.actualizarContraseña(id, contraseña);
+    res.status(200).json(usuarioActualizado);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
 
   // Actualizar los detalles de un usuario
   async actualizar(req, res) {

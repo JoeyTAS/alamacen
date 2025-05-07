@@ -92,7 +92,7 @@ const DetalleCompra = () => {
               {detalleCompra.productos.map((producto, index) => (
                 <tr key={index}>
                   <td>{producto.nombre}</td>
-                  <td>S/ {producto.precio_unitario.toFixed(2)}</td>
+                  <td>S/ {Number(producto.precio_unitario).toFixed(2)}</td>
                   <td>{producto.cantidad}</td>
                   <td>S/ {producto.subtotal.toFixed(2)}</td>
                 </tr>

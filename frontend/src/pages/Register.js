@@ -1,9 +1,8 @@
-"use client"
-
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { registerUser } from "../services/usuarioService"
-import "./Auth.css"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../services/usuarioService";
+import { getReniecDataByDni } from "../services/reniecService";
+import "./Auth.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,51 +12,64 @@ const Register = () => {
     email: "",
     contraseña: "",
     confirmarContraseña: "",
-    rol: "cliente", // Cambiado de "usuario" a "cliente"
-  })
+    rol: "cliente",
+  });
 
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
+
+  const handleDniSearch = async () => {
+    if (formData.dni.length === 8 && !isNaN(formData.dni)) {
+      try {
+        const reniecData = await getReniecDataByDni(formData.dni);
+        if (reniecData) {
+          setFormData({
+            ...formData,
+            nombres: reniecData.nombres,
+            apellidos: `${reniecData.apellidoPaterno} ${reniecData.apellidoMaterno}`,
+          });
+          setError(""); // Limpia cualquier error previo
+        } else {
+          setError("No se encontraron datos para el DNI proporcionado");
+        }
+      } catch (err) {
+        setError("Error al consultar los datos de RENIEC");
+      }
+    } else {
+      setError("El DNI debe tener exactamente 8 dígitos numéricos");
+    }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    // Validaciones básicas
     if (formData.contraseña !== formData.confirmarContraseña) {
-      setError("Las contraseñas no coinciden")
-      return
-    }
-
-    if (formData.contraseña.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres")
-      return
+      setError("Las contraseñas no coinciden");
+      return;
     }
 
     try {
-      setLoading(true)
-      setError("")
+      setLoading(true);
+      setError("");
 
-      // Eliminar confirmarContraseña antes de enviar al servidor
-      const { confirmarContraseña, ...userData } = formData
-
-      await registerUser(userData)
-      navigate("/login")
+      const { confirmarContraseña, ...userData } = formData;
+      await registerUser(userData);
+      navigate("/login");
     } catch (err) {
-      setError(err.message || "Error al registrar usuario")
-      console.error("Error de registro:", err)
+      setError(err.message || "Error al registrar usuario");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="auth-container">
@@ -70,15 +82,26 @@ const Register = () => {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="dni">DNI</label>
-            <input
-              type="text"
-              id="dni"
-              name="dni"
-              className="form-control"
-              value={formData.dni}
-              onChange={handleChange}
-              required
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type="text"
+                id="dni"
+                name="dni"
+                className="form-control"
+                value={formData.dni}
+                onChange={handleChange}
+                required
+                style={{ flex: 1 }}
+              />
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleDniSearch}
+                style={{ marginLeft: "10px" }}
+              >
+                Buscar
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
@@ -89,7 +112,7 @@ const Register = () => {
               name="nombres"
               className="form-control"
               value={formData.nombres}
-              onChange={handleChange}
+              readOnly // Campo no editable
               required
             />
           </div>
@@ -102,7 +125,7 @@ const Register = () => {
               name="apellidos"
               className="form-control"
               value={formData.apellidos}
-              onChange={handleChange}
+              readOnly // Campo no editable
               required
             />
           </div>
@@ -146,14 +169,6 @@ const Register = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="rol">Rol</label>
-            <select id="rol" name="rol" className="form-control" value={formData.rol} onChange={handleChange} required>
-              <option value="cliente">Cliente</option>
-              <option value="empleado">Empleado</option>
-            </select>
-          </div>
-
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
             {loading ? "Registrando..." : "Registrarse"}
           </button>
@@ -166,7 +181,7 @@ const Register = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

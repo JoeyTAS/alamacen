@@ -38,19 +38,9 @@ export const AuthProvider = ({ children }) => {
       setError(null)
       console.log("AuthContext: Intentando iniciar sesión con", email)
 
-      // Solución temporal: Intentar obtener el usuario directamente por email
-      let userData
-      try {
-        console.log("AuthContext: Intentando obtener usuario directamente")
-        userData = await getUserByEmail(email)
-        console.log("AuthContext: Usuario obtenido directamente:", userData)
-      } catch (directError) {
-        console.error("AuthContext: Error al obtener usuario directamente:", directError)
-
-        // Si falla, intentamos el login normal
-        console.log("AuthContext: Intentando login normal")
-        userData = await loginUser(email, contraseña)
-      }
+      // Realizar el login normal con verificación de credenciales
+      const userData = await loginUser(email, contraseña)
+      console.log("AuthContext: Usuario autenticado correctamente:", userData)
 
       setCurrentUser(userData)
       localStorage.setItem("user", JSON.stringify(userData))
