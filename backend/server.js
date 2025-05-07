@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const UsuarioRouters = require('./routers/UsuarioRouters'); // Asegúrate de importar las rutas de Usuario correctamente
-const CompraRouters = require('./routers/CompraRouters'); // Asegúrate de importar las rutas de Compra correctamente
-const HistorialRouters = require('./routers/HistorialRouters'); // Asegúrate de importar las rutas de Historial correctamente
-const ProductoRouters = require('./routers/ProductoRouters'); // Asegúrate de importar las rutas de Producto correctamente
+const UsuarioRouters = require('./routers/UsuarioRouters'); 
+const CompraRouters = require('./routers/CompraRouters'); 
+const HistorialRouters = require('./routers/HistorialRouters'); 
+const ProductoRouters = require('./routers/ProductoRouters'); 
 
 class Server {
   constructor() {
@@ -19,10 +19,10 @@ class Server {
 
   routes() {
     // Registra las rutas para usuarios
-    this.app.use('/api/compra', CompraRouters); // Usa '/api/compra' como prefijo para las rutas de compra
-    this.app.use('/api/historial', HistorialRouters); // Usa '/api/historial' como prefijo para las rutas de historial
-    this.app.use('/api/producto', ProductoRouters); // Usa '/api/producto' como prefijo para las rutas de producto
-    this.app.use('/api/usuarios', UsuarioRouters); // Usa '/api/usuarios' como prefijo para las rutas de usuario
+    this.app.use('/api/compra', CompraRouters); // '/api/compra' como prefijo para las rutas de compra
+    this.app.use('/api/historial', HistorialRouters); // '/api/historial' como prefijo para las rutas de historial
+    this.app.use('/api/producto', ProductoRouters); // '/api/producto' como prefijo para las rutas de producto
+    this.app.use('/api/usuarios', UsuarioRouters); // '/api/usuarios' como prefijo para las rutas de usuario
   }
 
   start() {

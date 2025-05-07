@@ -10,8 +10,6 @@ class CompraModel {
     return result.rows[0];
   }
 
-
-
   // Obtener una compra por ID
   async getCompraById(id) {
     const result = await db.query('SELECT * FROM compras WHERE id = $1', [id]);
