@@ -11,4 +11,7 @@ router.get('/compra/:compra_id', HistorialCompraController.obtenerPorCompra);
 // Obtener historial por ID de usuario
 router.get('/usuario/:usuario_id', HistorialCompraController.obtenerPorUsuario);
 
+
+// Obtener todos los productos comprados
+router.get('/historial-general', HistorialCompraController.obtenerTodosLosProductosComprados);
 module.exports = router;

@@ -2,7 +2,7 @@ const HistorialModel = require('../models/HistorialCompraModel');
 
 class HistorialCompraService {
   async agregarProducto(compra_id, producto_id, cantidad, precio_unitario) {
-    return await HistorialModel.agregarProductoACompra(compra_id, producto_id, cantidad, precio_unitario);
+    return await HistorialModel.addProductoToCompra(compra_id, producto_id, cantidad, precio_unitario);
   }
 
   async obtenerPorCompra(compra_id) {
@@ -11,6 +11,10 @@ class HistorialCompraService {
 
   async obtenerPorUsuario(usuario_id) {
     return await HistorialModel.getHistorialByUsuario(usuario_id);
+  }
+
+  async obtenerTodosLosProductosComprados() {
+    return await HistorialModel.getTodosLosProductosComprados();
   }
 }
 

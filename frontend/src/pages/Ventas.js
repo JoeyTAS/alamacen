@@ -2,7 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { getAllProductos } from "../services/productoService";
-import { realizarCompra } from "../services/compraService";
+import compraService from "../services/compraService";
+import historialService from "../services/historialService";
+
 import "./Ventas.css";
 
 const Ventas = () => {
@@ -62,7 +64,7 @@ const Ventas = () => {
         );
       } else {
         setError(`No hay suficiente stock de ${producto.nombre}`);
-        setTimeout(() => setError(null), 3000);
+        setTimeout(() => setError(null), 5000);
       }
     } else {
       // Si no está en el carrito, agregarlo con cantidad 1
@@ -86,7 +88,7 @@ const Ventas = () => {
 
     if (nuevaCantidad > producto.stock) {
       setError(`No hay suficiente stock de ${producto.nombre}`);
-      setTimeout(() => setError(null), 3000);
+      setTimeout(() => setError(null), 5000);
       return;
     }
 
@@ -104,37 +106,51 @@ const Ventas = () => {
       return total + precio * item.cantidad;
     }, 0);
   };
-
-  // Realizar compra
   const finalizarCompra = async () => {
     if (carrito.length === 0) {
       setError("El carrito está vacío");
       return;
     }
-
+  
+    if (carrito.some((item) => item.cantidad <= 0)) {
+      setError("Hay productos con cantidades inválidas en el carrito.");
+      return;
+    }
+  
     try {
       setLoading(true);
-
-      // Preparar datos para la API
-      const compraData = {
-        usuario_id: currentUser.id,
-        productos: carrito.map((item) => ({
-          producto_id: item.id,
-          cantidad: item.cantidad,
-          precio_unitario: item.precio,
-        })),
-      };
-
-      // Enviar compra al servidor
-      const resultado = await realizarCompra(compraData);
-
-      // Limpiar carrito y mostrar mensaje de éxito
+  
+      // 1. Crear la compra
+      const compraData = { usuario_id: currentUser.id };
+      const nuevaCompra = await compraService.realizarCompra(compraData);
+  
+      if (!nuevaCompra || !nuevaCompra.id) {
+        throw new Error("La respuesta del backend no contiene un ID de compra válido.");
+      }
+  
+      console.log("Compra creada:", nuevaCompra);
+  
+      // 2. Registrar cada producto en historial_compras
+      const agregarProductos = carrito.map((item) =>
+        historialService.agregarProductoACompra(
+          nuevaCompra.id,
+          item.id,
+          item.cantidad,
+          item.precio
+        )
+      );
+  
+      // Esperar a que todos los productos se registren
+      await Promise.all(agregarProductos);
+  
+      // 3. Limpiar carrito y redirigir
       setCarrito([]);
       setSuccess("¡Compra realizada con éxito!");
-
-      // Redirigir al historial después de 2 segundos
+      setTimeout(() => setSuccess(null), 5000);
+  
+      // Redirigir al historial de compra
       setTimeout(() => {
-        navigate("/historial");
+        navigate(`/historial/compra/${nuevaCompra.id}`);
       }, 2000);
     } catch (err) {
       console.error("Error al realizar la compra:", err);
@@ -143,6 +159,7 @@ const Ventas = () => {
       setLoading(false);
     }
   };
+  
 
   if (loading && productos.length === 0) {
     return <div className="loading">Cargando...</div>;
@@ -218,13 +235,9 @@ const Ventas = () => {
                       </div>
                       <div className="carrito-item-actions">
                         <div className="cantidad-control">
-                          <button onClick={() => cambiarCantidad(item.id, item.cantidad - 1)}>
-                            -
-                          </button>
+                          <button onClick={() => cambiarCantidad(item.id, item.cantidad - 1)}>-</button>
                           <span>{item.cantidad}</span>
-                          <button onClick={() => cambiarCantidad(item.id, item.cantidad + 1)}>
-                            +
-                          </button>
+                          <button onClick={() => cambiarCantidad(item.id, item.cantidad + 1)}>+</button>
                         </div>
                         <button
                           className="btn-delete"

@@ -41,6 +41,19 @@ class HistorialCompraController {
       res.status(500).json({ error: 'Error al obtener historial por usuario' });
     }
   }
+
+  async obtenerTodosLosProductosComprados(req, res) {
+    try {
+      const productos = await HistorialCompraService.obtenerTodosLosProductosComprados();
+      res.json(productos);
+    } catch (error) {
+      console.error('Error al obtener todos los productos comprados:', error);
+      res.status(500).json({ error: 'Error al obtener todos los productos comprados' });
+    }
+  }
+
+
+  
 }
 
 module.exports = new HistorialCompraController();

@@ -80,28 +80,35 @@ const Productos = () => {
   // Enviar formulario (crear o actualizar)
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const precio = parseFloat(formData.precio);
+    const stock = parseInt(formData.stock);
+  
+    if (isNaN(precio) || precio < 0) {
+      setError("El precio debe ser un número mayor o igual a cero.");
+      return;
+    }
+  
+    if (isNaN(stock) || stock < 0) {
+      setError("El stock debe ser un número entero mayor o igual a cero.");
+      return;
+    }
+  
     try {
       setLoading(true);
-
-      // Convertir valores numéricos
+  
       const productoData = {
         ...formData,
-        precio: Number.parseFloat(formData.precio),
-        stock: Number.parseInt(formData.stock),
+        precio,
+        stock,
       };
-
-      console.log("Datos a enviar en actualización:", productoData);
-
+  
       if (currentProducto) {
-        // Actualizar producto existente
         await updateProducto(currentProducto.id, productoData);
       } else {
-        // Crear nuevo producto
         await createProducto(productoData);
       }
-
-      // Recargar lista de productos
+  
       await fetchProductos();
       setShowForm(false);
       setError(null);
@@ -112,6 +119,7 @@ const Productos = () => {
       setLoading(false);
     }
   };
+  
 
   // Eliminar producto
   const handleDeleteProducto = async (id) => {

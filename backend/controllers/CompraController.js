@@ -24,6 +24,15 @@ class CompraController {
       res.status(500).json({ error: 'Error al eliminar la compra' });
     }
   }
+  async obtenerHistorialPorUsuario(req, res) {
+    try {
+      const usuario_id = req.params.id;
+      const historial = await CompraService.obtenerHistorialPorUsuarioId(usuario_id); // Llamada al servicio correcto
+      res.status(200).json(historial);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener el historial de compras' });
+    }
+  }
 
   async obtenerHistorialPorUsuario(req, res) {
     try {

@@ -17,8 +17,10 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
+        <img src="/as.png" alt="Logo" className="navbar-logo" width={150}/>
+
         <Link to="/" className="navbar-logo">
-          Nova Salud
+          Nova Tools
         </Link>
 
         {currentUser ? (
@@ -26,7 +28,7 @@ const Navbar = () => {
             <ul className="nav-menu">
               <li className="nav-item">
                 <Link to="/" className="nav-link">
-                  Dashboard
+                  Panel
                 </Link>
               </li>
               <li className="nav-item">
@@ -57,12 +59,8 @@ const Navbar = () => {
           </>
         ) : (
           <ul className="nav-menu">
-            <li className="nav-item">
-              
-            </li>
-            <li className="nav-item">
-            
-            </li>
+            <li className="nav-item"></li>
+            <li className="nav-item"></li>
           </ul>
         )}
       </div>

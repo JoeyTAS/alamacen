@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
@@ -10,8 +9,6 @@ const HistorialCompras = () => {
   const [historial, setHistorial] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
-  // Agrupar compras por ID de compra
   const [comprasAgrupadas, setComprasAgrupadas] = useState({})
 
   useEffect(() => {
@@ -31,19 +28,17 @@ const HistorialCompras = () => {
               total: 0,
             }
           }
-        
-          // Agregar producto a la compra
+
           acc[compra.compra_id].productos.push({
             id: compra.producto_id,
-            nombre: compra.producto,
-            cantidad: compra.cantidad,
-            precio_unitario: compra.precio_unitario,
-            subtotal: parseFloat(compra.total) || 0, // Asegurar que subtotal sea un número
+            nombre: compra.producto || "Producto desconocido",
+            cantidad: compra.cantidad || 0,
+            precio_unitario: compra.precio_unitario || 0,
+            subtotal: (compra.cantidad && compra.precio_unitario) ? (parseFloat(compra.cantidad) * parseFloat(compra.precio_unitario)) : 0,
           })
-        
-          // Actualizar total de la compra
-          acc[compra.compra_id].total += parseFloat(compra.total) || 0 // Asegurar que total sea un número
-        
+
+          acc[compra.compra_id].total += parseFloat(compra.cantidad) * parseFloat(compra.precio_unitario) || 0
+
           return acc
         }, {})
 
@@ -101,7 +96,11 @@ const HistorialCompras = () => {
                     </li>
                   ))}
                   {compra.productos.length > 3 && (
-                    <li className="producto-item-more">Y {compra.productos.length - 3} productos más...</li>
+                    <li className="producto-item-more">
+                      <Link to={`/compra/${compra.id}`} className="ver-mas-productos">
+                        Ver más productos
+                      </Link>
+                    </li>
                   )}
                 </ul>
               </div>
