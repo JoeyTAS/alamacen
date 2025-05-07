@@ -91,6 +91,8 @@ const Productos = () => {
         stock: Number.parseInt(formData.stock),
       };
 
+      console.log("Datos a enviar en actualización:", productoData);
+
       if (currentProducto) {
         // Actualizar producto existente
         await updateProducto(currentProducto.id, productoData);
@@ -235,12 +237,9 @@ const Productos = () => {
                   required
                 >
                   <option value="">Seleccione una categoría</option>
-                  <option value="Medicamentos">Medicamentos</option>
-                  <option value="Vitaminas">Vitaminas</option>
-                  <option value="Cuidado Personal">Cuidado Personal</option>
-                  <option value="Primeros Auxilios">Primeros Auxilios</option>
-                  <option value="Bebés">Bebés</option>
-                  <option value="Otros">Otros</option>
+                  <option value="inalambrico">inalambrico</option>
+                  <option value="electrico">electrico</option>
+                  <option value="manual">manual</option>
                 </select>
               </div>
 

@@ -39,6 +39,13 @@ class ProductoController {
 
   async actualizar(req, res) {
     try {
+      const { nombre, descripcion, precio, categoria, stock } = req.body;
+
+      // Validar campos obligatorios
+      if (!nombre || !precio || !stock) {
+        return res.status(400).json({ error: 'Faltan datos obligatorios para actualizar el producto.' });
+      }
+
       const actualizado = await ProductoService.actualizarProducto(req.params.id, req.body);
       res.json({
         message: 'Producto actualizado exitosamente.',
